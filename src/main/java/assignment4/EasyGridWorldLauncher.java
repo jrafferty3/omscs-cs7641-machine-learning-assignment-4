@@ -13,6 +13,9 @@ import burlap.oomdp.singleagent.environment.SimulatedEnvironment;
 import burlap.oomdp.singleagent.explorer.VisualExplorer;
 import burlap.oomdp.visualizer.Visualizer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EasyGridWorldLauncher {
 	//These are some boolean variables that affect what will actually get executed
 	private static boolean visualizeInitialGridWorld = true; //Loads a GUI with the agent, walls, and goal
@@ -33,11 +36,11 @@ public class EasyGridWorldLauncher {
 	private static Integer NUM_INTERVALS = 100;
 
 	protected static int[][] userMap = new int[][] { 
-			{ 0, 0, 0, 0, 0},
-			{ 0, 1, 1, 1, 0},
-			{ 0, 1, 1, 1, 0},
-			{ 1, 0, 1, 1, 0},
-			{ 0, 0, 0, 0, 0}, };
+			{ 1, 1, 0, 0, 0},
+			{ 1, 0, 0, 1, 0},
+			{ 1, 0, 0, 1, 0},
+			{ 0, 0, 0, 1, 0},
+			{ 0, 1, 0, 0, 0}, };
 	
 //	private static Integer mapLen = map.length-1;
 
@@ -48,12 +51,22 @@ public class EasyGridWorldLauncher {
 		int maxY = map[0].length-1;
 		// 
 
-		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY); //0 index map is 11X11
+		List<double[]> wrecks = new ArrayList<double[]>();
+		double[] w1 = {2,3};
+		wrecks.add(w1);
+		
+		List<double[]> lights = new ArrayList<double[]>();
+		double[] l1 = {3, 0};
+		lights.add(l1);
+		double[] l2 = {4, 2};
+		lights.add(l2);
+
+		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY, wrecks, lights); //0 index map is 11X11
 		Domain domain = gen.generateDomain();
 
 		State initialState = BasicGridWorld.getExampleState(domain);
-
-		RewardFunction rf = new BasicRewardFunction(maxX,maxY); //Goal is at the top right grid
+		
+		RewardFunction rf = new BasicRewardFunction(maxX,maxY, wrecks, lights); //Goal is at the top right grid
 		TerminalFunction tf = new BasicTerminalFunction(maxX,maxY); //Goal is at the top right grid
 
 		SimulatedEnvironment env = new SimulatedEnvironment(domain, rf, tf,

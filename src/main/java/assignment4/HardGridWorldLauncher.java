@@ -1,5 +1,8 @@
 package assignment4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import assignment4.util.AnalysisAggregator;
 import assignment4.util.AnalysisRunner;
 import assignment4.util.BasicRewardFunction;
@@ -34,16 +37,16 @@ public class HardGridWorldLauncher {
 
 	protected static int[][] userMap = new int[][] { 
 										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-										{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0},
-										{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0},
-										{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0},
-										{ 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},};
+										{ 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0},
+										{ 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0},
+										{ 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0},
+										{ 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
+										{ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0},
+										{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0},
+										{ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0},
+										{ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},};
 
 //	private static Integer mapLen = map.length-1;
 
@@ -54,12 +57,22 @@ public class HardGridWorldLauncher {
 		int maxY = map[0].length-1;
 		// 
 
-		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY); //0 index map is 11X11
+		List<double[]> wrecks = new ArrayList<double[]>();
+		double[] w1 = {7, 0};
+		wrecks.add(w1);
+		
+		List<double[]> lights = new ArrayList<double[]>();
+		double[] l4 = {6,10};
+		lights.add(l4);
+		double[] l5 = {3,3};
+		lights.add(l5);
+
+		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY, wrecks, lights); //0 index map is 11X11
 		Domain domain = gen.generateDomain();
 
 		State initialState = BasicGridWorld.getExampleState(domain);
 
-		RewardFunction rf = new BasicRewardFunction(maxX,maxY); //Goal is at the top right grid
+		RewardFunction rf = new BasicRewardFunction(maxX,maxY, wrecks, lights); //Goal is at the top right grid
 		TerminalFunction tf = new BasicTerminalFunction(maxX,maxY); //Goal is at the top right grid
 		
 		SimulatedEnvironment env = new SimulatedEnvironment(domain, rf, tf,

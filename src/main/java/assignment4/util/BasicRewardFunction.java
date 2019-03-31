@@ -1,5 +1,7 @@
 package assignment4.util;
 
+import java.util.List;
+
 import assignment4.BasicGridWorld;
 import burlap.oomdp.core.objects.ObjectInstance;
 import burlap.oomdp.core.states.State;
@@ -10,10 +12,14 @@ public class BasicRewardFunction implements RewardFunction {
 
 	int goalX;
 	int goalY;
+	List<double[]> wrecks;
+	List<double[]> lights;
 
-	public BasicRewardFunction(int goalX, int goalY) {
+	public BasicRewardFunction(int goalX, int goalY, List<double[]> wrecks, List<double[]> lights) {
 		this.goalX = goalX;
 		this.goalY = goalY;
+		this.wrecks = wrecks;
+		this.lights = lights;
 	}
 
 	@Override
@@ -28,8 +34,20 @@ public class BasicRewardFunction implements RewardFunction {
 		if (ax == this.goalX && ay == this.goalY) {
 			return 100.;
 		}
+		
+		for(double[] location : wrecks) {
+			if(location[0] == ax && location[1] == ay) {
+				return -50.;
+			}
+		}
+		
+		for(double[] location : lights) {
+			if(location[0] == ax && location[1] == ay) {
+				return -5.;
+			}
+		}
 
-		return -1;
+		return -0.05;
 	}
 
 }

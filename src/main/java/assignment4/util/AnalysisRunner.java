@@ -52,7 +52,7 @@ public class AnalysisRunner {
 					domain,
 					rf,
 					tf,
-					0.99,
+					0.70,
 					hashingFactory,
 					-1, numIterations); //Added a very high delta number in order to guarantee that value iteration occurs the max number of iterations
 										   //for comparison with the other algorithms.
@@ -90,7 +90,7 @@ public class AnalysisRunner {
 					domain,
 					rf,
 					tf,
-					0.99,
+					0.70,
 					hashingFactory,
 					-1, 1, numIterations);
 	

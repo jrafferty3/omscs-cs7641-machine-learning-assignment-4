@@ -1,7 +1,10 @@
 package assignment4;
 
+import java.util.List;
+
 import assignment4.util.AgentPainter;
 import assignment4.util.AtLocation;
+import assignment4.util.BadPainter;
 import assignment4.util.LocationPainter;
 import assignment4.util.Movement;
 import assignment4.util.WallPainter;
@@ -36,12 +39,15 @@ public class BasicGridWorld implements DomainGenerator {
 	protected int[][] map ;
 	protected static int mapx;
 	protected static int mapy;
+	protected static List<double[]> wrecks;
+	protected static List<double[]> lights;
 	
-	public BasicGridWorld(int[][] map,int mapx, int mapy){
+	public BasicGridWorld(int[][] map,int mapx, int mapy, List<double[]> wrecks, List<double[]> lights){
 		this.map = map;
 		this.mapx = mapx;
 		this.mapy = mapy;
-		
+		this.wrecks = wrecks;
+		this.lights = lights;
 	}
 
 
@@ -66,6 +72,18 @@ public class BasicGridWorld implements DomainGenerator {
 		locationClass.addAttribute(xatt);
 		locationClass.addAttribute(yatt);
 
+		for(int i =0; i<wrecks.size(); i++) {
+			ObjectClass wreckClass = new ObjectClass(domain, "wreck" + Integer.toString(i));
+			wreckClass.addAttribute(xatt);
+			wreckClass.addAttribute(yatt);
+		}
+
+		for(int i =0; i<lights.size(); i++) {
+			ObjectClass lightClass = new ObjectClass(domain, "light" + Integer.toString(i));
+			lightClass.addAttribute(xatt);
+			lightClass.addAttribute(yatt);
+		}
+
 		new Movement(ACTIONNORTH, domain, 0, map);
 		new Movement(ACTIONSOUTH, domain, 1, map);
 		new Movement(ACTIONEAST, domain, 2, map);
@@ -83,13 +101,31 @@ public class BasicGridWorld implements DomainGenerator {
 		agent.setValue(ATTX, 0);
 		agent.setValue(ATTY, 0);
 
+		s.addObject(agent);
+
 		ObjectInstance location = new MutableObjectInstance(
 				domain.getObjectClass(CLASSLOCATION), "location0");
 		location.setValue(ATTX, mapx);
 		location.setValue(ATTY, mapy);
 
-		s.addObject(agent);
 		s.addObject(location);
+		
+
+		for(int i =0; i<wrecks.size(); i++) {
+			ObjectInstance wreck = new MutableObjectInstance(
+					domain.getObjectClass("wreck" + Integer.toString(i)), "wreck" + Integer.toString(i));
+			wreck.setValue(ATTX, wrecks.get(i)[0]);
+			wreck.setValue(ATTY, wrecks.get(i)[1]);
+			s.addObject(wreck);
+		}
+
+		for(int i =0; i<lights.size(); i++) {
+			ObjectInstance light = new MutableObjectInstance(
+					domain.getObjectClass("light" + Integer.toString(i)), "light" + Integer.toString(i));
+			light.setValue(ATTX, lights.get(i)[0]);
+			light.setValue(ATTY, lights.get(i)[1]);
+			s.addObject(light);
+		}
 
 		return s;
 	}
@@ -99,6 +135,14 @@ public class BasicGridWorld implements DomainGenerator {
 		rl.addStaticPainter(new WallPainter(map));
 		rl.addObjectClassPainter(CLASSLOCATION, new LocationPainter(map));
 		rl.addObjectClassPainter(CLASSAGENT, new AgentPainter(map));
+
+		for(int i =0; i<wrecks.size(); i++) {
+			rl.addObjectClassPainter("wreck" + Integer.toString(i), new BadPainter(map));
+		}
+
+		for(int i =0; i<lights.size(); i++) {
+			rl.addObjectClassPainter("light" + Integer.toString(i), new BadPainter(map));
+		}
 
 		return rl;
 	}
