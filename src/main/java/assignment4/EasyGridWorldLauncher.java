@@ -21,8 +21,8 @@ public class EasyGridWorldLauncher {
 	private static boolean visualizeInitialGridWorld = true; //Loads a GUI with the agent, walls, and goal
 	
 	//runValueIteration, runPolicyIteration, and runQLearning indicate which algorithms will run in the experiment
-	private static boolean runValueIteration = true; 
-	private static boolean runPolicyIteration = true;
+	private static boolean runValueIteration = false; 
+	private static boolean runPolicyIteration = false;
 	private static boolean runQLearning = true;
 	
 	//showValueIterationPolicyMap, showPolicyIterationPolicyMap, and showQLearningPolicyMap will open a GUI
@@ -54,12 +54,12 @@ public class EasyGridWorldLauncher {
 		List<double[]> wrecks = new ArrayList<double[]>();
 		double[] w1 = {2,3};
 		wrecks.add(w1);
+		double[] w2 = {3,0};
+		wrecks.add(w2);
+		double[] w3 = {4,2};
+		wrecks.add(w3);
 		
 		List<double[]> lights = new ArrayList<double[]>();
-		double[] l1 = {3, 0};
-		lights.add(l1);
-		double[] l2 = {4, 2};
-		lights.add(l2);
 
 		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY, wrecks, lights); //0 index map is 11X11
 		Domain domain = gen.generateDomain();

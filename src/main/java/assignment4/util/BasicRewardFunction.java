@@ -32,7 +32,7 @@ public class BasicRewardFunction implements RewardFunction {
 
 		// are they at goal location?
 		if (ax == this.goalX && ay == this.goalY) {
-			return 100.;
+			return 500.;
 		}
 		
 		for(double[] location : wrecks) {

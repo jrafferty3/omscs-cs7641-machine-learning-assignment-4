@@ -21,8 +21,8 @@ public class HardGridWorldLauncher {
 	private static boolean visualizeInitialGridWorld = true; //Loads a GUI with the agent, walls, and goal
 	
 	//runValueIteration, runPolicyIteration, and runQLearning indicate which algorithms will run in the experiment
-	private static boolean runValueIteration = true; 
-	private static boolean runPolicyIteration = true;
+	private static boolean runValueIteration = false; 
+	private static boolean runPolicyIteration = false;
 	private static boolean runQLearning = true;
 	
 	//showValueIterationPolicyMap, showPolicyIterationPolicyMap, and showQLearningPolicyMap will open a GUI
@@ -35,7 +35,7 @@ public class HardGridWorldLauncher {
 	private static Integer MAX_ITERATIONS = 100;
 	private static Integer NUM_INTERVALS = 100;
 
-	protected static int[][] userMap = new int[][] { 
+	/*protected static int[][] userMap = new int[][] { 
 										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 										{ 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0},
 										{ 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0},
@@ -46,7 +46,30 @@ public class HardGridWorldLauncher {
 										{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0},
 										{ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0},
 										{ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},};
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},};*/
+
+	protected static int[][] userMap = new int[][] { 
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+										{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 //	private static Integer mapLen = map.length-1;
 
@@ -60,12 +83,26 @@ public class HardGridWorldLauncher {
 		List<double[]> wrecks = new ArrayList<double[]>();
 		double[] w1 = {7, 0};
 		wrecks.add(w1);
+		double[] w2 = {19, 15};
+		wrecks.add(w2);
+		double[] w3 = {0, 10};
+		wrecks.add(w3);
+		double[] w4 = {10, 20};
+		wrecks.add(w4);
 		
 		List<double[]> lights = new ArrayList<double[]>();
-		double[] l4 = {6,10};
+		double[] l1 = {7,6};
+		lights.add(l1);
+		double[] l2 = {7,9};
+		lights.add(l2);
+		double[] l3 = {7,12};
+		lights.add(l3);
+		double[] l4 = {10,12};
 		lights.add(l4);
-		double[] l5 = {3,3};
+		double[] l5 = {10,9};
 		lights.add(l5);
+		double[] l6 = {13,9};
+		lights.add(l6);
 
 		BasicGridWorld gen = new BasicGridWorld(map,maxX,maxY, wrecks, lights); //0 index map is 11X11
 		Domain domain = gen.generateDomain();

@@ -1,7 +1,10 @@
 package assignment4.util;
 
 import assignment4.BasicGridWorld;
+import burlap.behavior.policy.BoltzmannQPolicy;
+import burlap.behavior.policy.EpsilonGreedy;
 import burlap.behavior.policy.Policy;
+import burlap.behavior.policy.RandomPolicy;
 import burlap.behavior.singleagent.EpisodeAnalysis;
 import burlap.behavior.singleagent.auxiliary.StateReachability;
 import burlap.behavior.singleagent.auxiliary.valuefunctionvis.ValueFunctionVisualizerGUI;
@@ -59,7 +62,7 @@ public class AnalysisRunner {
 	
 			// run planning from our initial state
 			p = vi.planFromState(initialState);
-			AnalysisAggregator.addMillisecondsToFinishValueIteration((int) (System.nanoTime()-startTime)/1000000);
+			AnalysisAggregator.addMillisecondsToFinishValueIteration((System.nanoTime()-startTime)/1000000L);
 
 			// evaluate the policy with one roll out visualize the trajectory
 			ea = p.evaluateBehavior(initialState, rf, tf);
@@ -96,7 +99,7 @@ public class AnalysisRunner {
 	
 			// run planning from our initial state
 			p = pi.planFromState(initialState);
-			AnalysisAggregator.addMillisecondsToFinishPolicyIteration((int) (System.nanoTime()-startTime)/1000000);
+			AnalysisAggregator.addMillisecondsToFinishPolicyIteration((System.nanoTime()-startTime)/1000000L);
 
 			// evaluate the policy with one roll out visualize the trajectory
 			ea = p.evaluateBehavior(initialState, rf, tf);
@@ -145,7 +148,10 @@ public class AnalysisRunner {
 				domain,
 				0.99,
 				hashingFactory,
-				0.99, 0.99);
+				0.99, 
+				0.5,
+				new EpsilonGreedy(new QLearning(domain, 0.99, hashingFactory, 0.99, 0.5), 0.8), 
+				100);
 			
 			for (int i = 0; i < numIterations; i++) {
 				ea = agent.runLearningEpisode(env);
@@ -154,7 +160,7 @@ public class AnalysisRunner {
 			agent.initializeForPlanning(rf, tf, 1);
 			p = agent.planFromState(initialState);
 			AnalysisAggregator.addQLearningReward(calcRewardInEpisode(ea));
-			AnalysisAggregator.addMillisecondsToFinishQLearning((int) (System.nanoTime()-startTime)/1000000);
+			AnalysisAggregator.addMillisecondsToFinishQLearning((System.nanoTime()-startTime)/1000000L);
 			AnalysisAggregator.addStepsToFinishQLearning(ea.numTimeSteps());
 
 		}
